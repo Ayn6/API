@@ -10,7 +10,13 @@ namespace ass.Helper
         {
             CreateMap<Pokemon, PokemonDto>();
             CreateMap<Category, CategoryDto>();
+            CreateMap<CategoryDto, Category>();
             CreateMap<Country, CountryDto>();
+            CreateMap<CountryDto, Country>();
+            CreateMap<Review, ReviewDto>();
+            CreateMap<Reviewer, ReviewerDto>();
+            CreateMap<Owner, OwnerDto>();
+            CreateMap<OwnerDto, Owner>();
         }
     }
 }

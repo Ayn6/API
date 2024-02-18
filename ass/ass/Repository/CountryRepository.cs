@@ -8,11 +8,9 @@ namespace ass.Repository
     public class CountryRepository : ICountryRepository
     {
         private readonly DataContext _context;
-        private readonly IMapper _mapper;
         public CountryRepository(DataContext context, IMapper mapper)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public bool CountryExists(int id)
@@ -38,6 +36,16 @@ namespace ass.Repository
         public ICollection<Owner> GetOwnersFromCountry(int countryId)
         {
             return _context.Owners.Where(c => c.Country.Id == countryId).ToList();
+        }
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
+        public bool CreateCountry(Country country)
+        {
+            _context.Add(country);
+            return Save();
         }
     }
 }

@@ -73,5 +73,40 @@ namespace ass.Controllers
 
             return Ok(country);
         }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+
+        public IActionResult CreateCountry([FromBody] CountryDto counryCreate)
+        {
+            if (counryCreate == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var country = _countryRepository.GetCountries().Where(c => c.Name.Trim().ToUpper() == counryCreate.Name.TrimEnd().ToUpper()).FirstOrDefault();
+
+            if (country != null)
+            {
+                ModelState.AddModelError("", "Такая страна уже существует");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var countryMap = _mapper.Map<Country>(counryCreate);
+
+            if (!_countryRepository.CreateCountry(countryMap))
+            {
+                ModelState.AddModelError("", "Oops");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Sucsses");
+        }
     }
 }
